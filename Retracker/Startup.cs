@@ -7,6 +7,8 @@ namespace Retracker
 {
     public class Startup
     {
+        // ReSharper disable once UnusedMember.Global
+        // ReSharper disable once UnusedParameter.Global
         public void Configuration(IAppBuilder app) {}
     }
 }

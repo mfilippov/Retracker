@@ -10,9 +10,9 @@ namespace Retracker.Tracker
     {
         private readonly IMongoCollection<TorrentInfo> _torrents;
 
-        public int Interval { get; private set; }
+        public int Interval { get; }
 
-        public int MinInterval { get; private set; }
+        public int MinInterval { get; }
 
         public MongoDbTracker(string connectionString, int interval, int minInterval)
         {
@@ -30,7 +30,7 @@ namespace Retracker.Tracker
                 switch (@event)
                 {
                     case TorrentEvent.Started:
-                        
+
                         if (currentPeer != null)
                         {
                             currentPeer.State = State.Downloading;
@@ -60,14 +60,14 @@ namespace Retracker.Tracker
                 torrent.LastUpdateDate = DateTime.Now;
                 await _torrents.ReplaceOneAsync(t => t.Id == torrent.Id, torrent);
             }
-            else if (@event == TorrentEvent.Started || @event == TorrentEvent.None || @event == TorrentEvent.Completed)
+            else
             {
+
                 torrent = new TorrentInfo(infoHash);
                 torrent.Peers.Add(peer);
                 torrent.LastUpdateDate = DateTime.Now;
                 await _torrents.InsertOneAsync(torrent);
             }
-            
 
             return torrent;
         }

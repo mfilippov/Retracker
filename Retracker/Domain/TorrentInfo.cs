@@ -7,11 +7,16 @@ namespace Retracker.Domain
 {
     public class TorrentInfo
     {
+        // ReSharper disable UnusedAutoPropertyAccessor.Global
+        // ReSharper disable MemberCanBePrivate.Global
+        // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
         public ObjectId Id { get; set; }
         public string InfoHash { get; set; }
         public List<PeerInfo> Peers { get; set; }
         public DateTime LastUpdateDate { get; set; }
-
+        // ReSharper enable UnusedAutoPropertyAccessor.Global
+        // ReSharper enable MemberCanBePrivate.Global
+        // ReSharper enable AutoPropertyCanBeMadeGetOnly.Global
         public TorrentInfo()
         {
             Peers = new List<PeerInfo>();
