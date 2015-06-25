@@ -23,15 +23,16 @@ namespace Retracker
         }
 
         [Route("announce")]
-        public async Task<ActionResult> Announce(TorrentEvent @event, int port)
+        public async Task<ActionResult> Announce(TorrentEvent? @event, int port)
         {
+            if (!@event.HasValue) return Content("Event field not found");
             var queryString = Request.RawUrl.Split(new[] {'?'}, 2)[1];
-            
+
             foreach (var param in queryString.Split('&'))
             {
                 if (param.StartsWith("info_hash="))
                 {
-                    var parts = param.Split(new [] { '=' }, 2);
+                    var parts = param.Split(new[] {'='}, 2);
                     if (parts.Length == 2 && parts[1] != null)
                     {
                         var infoHash =
@@ -40,7 +41,8 @@ namespace Retracker
                                 .Replace("-", string.Empty)
                                 .ToLower();
                         var peer = new PeerInfo {IpAddress = Request.UserHostAddress, Port = port};
-                        return new AnnounceResult(await _tracker.ProcessAnnounce(infoHash, @event, peer), _tracker.Interval, _tracker.MinInterval);
+                        return new AnnounceResult(await _tracker.ProcessAnnounce(infoHash, @event.Value, peer),
+                            _tracker.Interval, _tracker.MinInterval);
                     }
                 }
             }
